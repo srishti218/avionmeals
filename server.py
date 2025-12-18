@@ -1,5 +1,5 @@
 import json
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, Response
 from openai import OpenAI
 import re
 from datetime import datetime 
@@ -55,6 +55,89 @@ def normalize_meals(payload: dict) -> dict:
 
     payload["meals"] = parsed_meals
     return payload
+
+
+@app.route("/")
+def health():
+    html = """
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>AvionMeals API</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <!-- MDBootstrap CSS -->
+        <link
+          href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.2.0/mdb.min.css"
+          rel="stylesheet"
+        />
+
+        <!-- Font Awesome -->
+        <link
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+          rel="stylesheet"
+        />
+    </head>
+
+    <body class="bg-light">
+
+        <div class="container vh-100 d-flex align-items-center justify-content-center">
+            <div class="card shadow-5-strong" style="max-width: 520px;">
+                <div class="card-body text-center p-5">
+
+                    <div class="mb-4">
+                        <i class="fas fa-plane-departure fa-3x text-primary"></i>
+                    </div>
+
+                    <h2 class="fw-bold mb-2">AvionMeals API</h2>
+                    <p class="text-muted mb-4">
+                        Backend service is running successfully
+                    </p>
+
+                    <span class="badge badge-success bg-success fs-6 mb-3">
+                        🟢 API STATUS: LIVE
+                    </span>
+
+                    <hr class="my-4" />
+
+                    <div class="text-start">
+                        <p class="mb-2">
+                            <i class="fas fa-server me-2 text-secondary"></i>
+                            Environment: <strong>Production</strong>
+                        </p>
+                        <p class="mb-2">
+                            <i class="fas fa-clock me-2 text-secondary"></i>
+                            Server Time: <strong id="time"></strong>
+                        </p>
+                        <p class="mb-0">
+                            <i class="fas fa-cloud me-2 text-secondary"></i>
+                            Platform: <strong>AWS EC2</strong>
+                        </p>
+                    </div>
+
+                    <div class="mt-4 text-muted small">
+                        © 2025 AvionMeals · All rights reserved
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- MDBootstrap JS -->
+        <script
+          src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.2.0/mdb.min.js">
+        </script>
+
+        <script>
+            document.getElementById("time").innerText =
+                new Date().toLocaleString();
+        </script>
+
+    </body>
+    </html>
+    """
+    return Response(html, mimetype="text/html")
 # -----------------------------
 # POST /generate-meal
 # -----------------------------
@@ -292,5 +375,3 @@ def track_event():
    
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
-
-    app.run(debug=True)

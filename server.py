@@ -5,11 +5,14 @@ import re
 from datetime import datetime 
 import os 
 import requests
+from dotenv import load_dotenv
+
 app = Flask(__name__)
 
 
+load_dotenv()  # loads .env automatically
 
-api_key= os.getenv("OPENAI_API_KEY")
+api_key= os.environ["OPENAI_API_KEY"]
 if not api_key:
     raise RuntimeError("Please set api_key environment variable.")
 client = OpenAI(api_key=api_key)

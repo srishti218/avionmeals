@@ -1,5 +1,5 @@
 import json
-from flask import Flask, request, jsonify, Response, send_file
+from flask import Flask, request, jsonify, send_from_directory
 from openai import OpenAI
 import re
 from datetime import datetime 
@@ -7,7 +7,7 @@ import os
 import requests
 from dotenv import load_dotenv
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="../swargamwellnesswebsite", static_url_path="")
 
 
 load_dotenv()  # loads .env automatically
@@ -58,12 +58,19 @@ def normalize_meals(payload: dict) -> dict:
 
     payload["meals"] = parsed_meals
     return payload
-@app.route("/", methods=["GET"])
-def home():
-    file_path = os.path.abspath(
-        "../swargamwellnesswebsite/swargamwellness.html"
-    )
-    return send_file(file_path)
+app = Flask(
+    __name__,
+    static_folder="../swargamwellnesswebsite",
+    static_url_path=""
+)
+
+@app.route("/")
+def index():
+    return send_from_directory(app.static_folder, "swargamwellness.html")
+
+@app.route("/<path:filename>")
+def serve_files(filename):
+    return send_from_directory(app.static_folder, filename)
 
 # @app.route("/")
 # def health():

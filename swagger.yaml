@@ -1,0 +1,129 @@
+openapi: 3.0.3
+info:
+  title: AvionMeals API
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:5000
+
+security:
+  - BearerAuth: []
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+paths:
+
+  # ---------- AUTH ----------
+  /auth/signup: { post: { tags: [Auth], summary: Signup } }
+  /auth/login: { post: { tags: [Auth], summary: Login } }
+  /auth/logout: { post: { tags: [Auth], summary: Logout } }
+  /auth/verify-otp: { post: { tags: [Auth], summary: Verify OTP } }
+  /auth/resend-otp: { post: { tags: [Auth], summary: Resend OTP } }
+  /auth/forgot-password: { post: { tags: [Auth], summary: Forgot password } }
+  /auth/reset-password: { post: { tags: [Auth], summary: Reset password } }
+  /auth/session: { get: { tags: [Auth], summary: Current session } }
+
+  # ---------- USER ----------
+  /user/profile:
+    get: { tags: [User], summary: Get profile }
+    put: { tags: [User], summary: Update profile }
+
+  /user/account:
+    delete: { tags: [User], summary: Delete account }
+
+  /user/preferences:
+    get: { tags: [User], summary: Get preferences }
+
+  # ---------- MEALS ----------
+  /meals:
+    get: { tags: [Meals], summary: List meals }
+    post: { tags: [Meals], summary: Create meal }
+
+  /meals/{meal_id}:
+    get: { tags: [Meals], summary: Get meal }
+    put: { tags: [Meals], summary: Update meal }
+    delete: { tags: [Meals], summary: Delete meal }
+
+  /meals/generate:
+    post: { tags: [Meals], summary: Generate meal plan }
+
+  # ---------- RECIPES ----------
+  /recipes:
+    get: { tags: [Recipes], summary: List recipes }
+    post: { tags: [Recipes], summary: Create recipe }
+
+  /recipes/{recipe_id}:
+    get: { tags: [Recipes], summary: Get recipe }
+    put: { tags: [Recipes], summary: Update recipe }
+    delete: { tags: [Recipes], summary: Delete recipe }
+
+  /recipes/generate:
+    post: { tags: [Recipes], summary: Generate recipe }
+
+  # ---------- AI ----------
+  /ai/generate-meal:
+    post: { tags: [AI], summary: AI meal }
+
+  /ai/generate-recipe:
+    post: { tags: [AI], summary: AI recipe }
+
+  /ai/chat:
+    post: { tags: [AI], summary: AI chat }
+
+  /ai/models:
+    get: { tags: [AI], summary: List AI models }
+
+  # ---------- SUBSCRIPTION ----------
+  /subscription/status:
+    get: { tags: [Subscription], summary: Subscription status }
+
+  /subscription/verify:
+    post: { tags: [Subscription], summary: Verify subscription }
+
+  /subscription/cancel:
+    post: { tags: [Subscription], summary: Cancel subscription }
+
+  /subscription/history:
+    get: { tags: [Subscription], summary: Subscription history }
+
+  # ---------- NOTIFICATIONS ----------
+  /notifications/register:
+    post: { tags: [Notifications], summary: Register device }
+
+  /notifications/unregister:
+    delete: { tags: [Notifications], summary: Unregister device }
+
+  /notifications/preferences:
+    get: { tags: [Notifications], summary: Notification preferences }
+
+  # ---------- USAGE ----------
+  /usage:
+    get: { tags: [Usage], summary: Usage stats }
+
+  /usage/increment:
+    post: { tags: [Usage], summary: Increment usage }
+
+  # ---------- ANALYTICS ----------
+  /analytics/overview:
+    get: { tags: [Analytics], summary: Analytics overview }
+
+  /analytics/user:
+    get: { tags: [Analytics], summary: User analytics }
+
+  # ---------- SYSTEM ----------
+  /system/health:
+    get:
+      tags: [System]
+      security: []
+      summary: Health check
+
+  /system/version:
+    get:
+      tags: [System]
+      security: []
+      summary: API version

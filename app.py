@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, send_from_directory
 from flask_cors import CORS
 from dotenv import load_dotenv
 import os
@@ -14,7 +14,8 @@ load_dotenv()
 
 
 def create_app():
-    app = Flask(__name__)
+    app = Flask(__name__,static_folder="../swargamwellnesswebsite",
+    static_url_path="")
 
     # ----------------------------
     # Load config
@@ -52,7 +53,14 @@ def create_app():
     def swagger_yaml():
         with open("swagger.yaml", "r") as f:
             return f.read(), 200, {"Content-Type": "text/yaml"}
-    
+    @app.route("/")
+    def index():
+        return send_from_directory(app.static_folder, "swargamwellness.html")
+
+    @app.route("/<path:filename>")
+    def serve_files(filename):
+        return send_from_directory(app.static_folder, filename)
+
     # ----------------------------
     # Blueprint imports
     # ----------------------------
@@ -88,9 +96,9 @@ def create_app():
     # ----------------------------
     # Health check shortcut
     # ----------------------------
-    @app.route("/")
-    def root():
-        return jsonify({"status": "AvionMeals Backend Running"}), 200
+    # @app.route("/")
+    # def root():
+    #     return jsonify({"status": "AvionMeals Backend Running"}), 200
 
     # ----------------------------
     # Error handlers
